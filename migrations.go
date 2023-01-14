@@ -1,4 +1,4 @@
-package config
+package configlite
 
 import (
 	"database/sql"

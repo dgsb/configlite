@@ -1,4 +1,4 @@
-package config_test
+package configlite_test
 
 import (
 	"path"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	. "github.com/dgsb/tt/config"
+	. "github.com/dgsb/configlite"
 )
 
 func TestRepository(t *testing.T) {

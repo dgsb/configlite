@@ -1,8 +1,8 @@
-// Package config provides an abstraction of application configuration values
+// Package configlite provides an abstraction of application configuration values
 // stored in a sqlite database. Several application can then share a single configuration database.
 //
 //nolint:all
-package config
+package configlite
 
 import (
 	"database/sql"
