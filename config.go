@@ -102,8 +102,14 @@ func (r *Repository) GetConfig(applicationName, configName string) (string, erro
 	return "", fmt.Errorf("%w: (%s, %s)", ErrConfigNotFound, applicationName, configName)
 }
 
-func (r *Repository) RegisterApplication(applicationName string) error {
+func (r *Repository) MustRegisterApplication(applicationName string) error {
 	_, err := r.db.Exec(`INSERT INTO applications (name) VALUES (?)`, applicationName)
+	return err
+}
+
+func (r *Repository) RegisterApplication(applicationName string) error {
+	_, err := r.db.Exec(
+		`INSERT INTO applications (name) VALUES (?) ON CONFLICT DO NOTHING`, applicationName)
 	return err
 }
 
