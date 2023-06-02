@@ -4,7 +4,8 @@ go 1.19
 
 require (
 	github.com/GuiaBolso/darwin v0.0.0-20191218124601-fd6d2aa3d244
-	github.com/magefile/mage v1.14.0
+	github.com/alecthomas/kong v0.7.1
+	github.com/magefile/mage v1.15.0
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/stretchr/testify v1.8.1
 )

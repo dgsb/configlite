@@ -46,6 +46,28 @@ func (r *Repository) Close() {
 	r.db = nil
 }
 
+func (r *Repository) GetApps() ([]string, error) {
+	rows, err := r.db.Query(`SELECT name FROM applications`)
+	if err != nil {
+		return []string{}, fmt.Errorf("cannot query the database: %w", err)
+	}
+	defer rows.Close()
+
+	apps := []string{}
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return []string{}, fmt.Errorf("cannot scan application table row: %w", err)
+		}
+		apps = append(apps, name)
+	}
+	if err := rows.Err(); err != nil {
+		return []string{}, fmt.Errorf("cannot browse application table: %w", err)
+	}
+
+	return apps, nil
+}
+
 func (r *Repository) GetConfigs(applicationName string) (map[string]string, error) {
 	rows, err := r.db.Query(`
 		SELECT configuration_name, configuration_value

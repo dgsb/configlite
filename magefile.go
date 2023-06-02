@@ -14,7 +14,7 @@ var Default = All
 
 // Build the tt binary
 func Build() error {
-	return sh.Run("go", "build", "./")
+	return sh.Run("go", "build", "./...")
 }
 
 // Run the test suite
