@@ -77,10 +77,35 @@ func (cmd *ListConfigsCmd) Run() error {
 	return nil
 }
 
+type UpsertConfigCmd struct {
+	CommonConfig  `embed:""`
+	Application   string `arg:""`
+	Configuration string `arg:""`
+	Value         string `arg:""`
+}
+
+func (cmd *UpsertConfigCmd) Run() error {
+	repo := cmd.GetRepo()
+	return repo.UpsertConfig(cmd.Application, cmd.Configuration, cmd.Value)
+}
+
+type DeleteConfigCmd struct {
+	CommonConfig  `embed:""`
+	LikePattern   bool   `long:"like" short:"l" default:"false" help:"the configuration name is going to be used in an sql like clause"`
+	Application   string `arg:""`
+	Configuration string `arg:""`
+}
+
+func (cmd *DeleteConfigCmd) Run() error {
+	return cmd.GetRepo().DeleteConfig(cmd.Application, cmd.Configuration, cmd.LikePattern)
+}
+
 func main() {
 	var cli struct {
-		ListApp     ListAppCmd     `cmd:"" aliases:"la"`
-		ListConfigs ListConfigsCmd `cmd:"" aliases:"lc"`
+		ListApp      ListAppCmd      `cmd:"" aliases:"la"`
+		ListConfigs  ListConfigsCmd  `cmd:"" aliases:"lc"`
+		UpsertConfig UpsertConfigCmd `cmd:"" aliases:"uc"`
+		DeleteConfig DeleteConfigCmd `cmd:"" aliases:"dc"`
 	}
 
 	ctx := kong.Parse(&cli, kong.Vars{"default_config_file": configlite.DefaultConfigurationFile()})

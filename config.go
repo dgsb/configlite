@@ -146,3 +146,27 @@ func (r *Repository) UpsertConfig(applicationName, configName, configValue strin
 		configValue)
 	return err
 }
+
+func (r *Repository) DeleteConfig(applicationName, configName string, likePattern bool) error {
+	query := func() string {
+		if likePattern {
+			return `DELETE FROM configurations
+						WHERE application_name = ?
+							AND configuration_name LIKE ?`
+		}
+		return `DELETE FROM configurations
+		WHERE application_name = ?
+			AND configuration_name = ?`
+	}
+	result, err := r.db.Exec(query(), applicationName, configName)
+	if err != nil {
+		return fmt.Errorf("cannot delete a specific config (%s, %s): %w",
+			applicationName, configName, err)
+	}
+	if numRows, err := result.RowsAffected(); err != nil {
+		return fmt.Errorf("cannot check the number of rows affected by the delete: %w", err)
+	} else if numRows == 0 {
+		return fmt.Errorf("unexpected number of affected rows: %d", numRows)
+	}
+	return nil
+}
